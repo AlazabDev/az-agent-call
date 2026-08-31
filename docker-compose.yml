@@ -1,0 +1,54 @@
+services:
+  az-agent-call:
+    build:
+      context: .
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+    image: az-agent-call:3.0.1
+    container_name: az-agent-call
+    restart: unless-stopped
+    environment:
+      PORT: ${PORT:-3300}
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL:-https://mcp.alazab.com}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://mcp.alazab.com}
+      GATEWAY_INSTANCE_ID: ${GATEWAY_INSTANCE_ID:-core-call-gateway}
+      SUPABASE_PROJECT_REF: ${SUPABASE_PROJECT_REF}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY is required}
+      AGENT_TOKENS_PATH: ${AGENT_TOKENS_PATH:-/app/data/agent-tokens.json}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}
+      MAILBOX_DOMAIN: ${MAILBOX_DOMAIN:-alazab.com}
+      MIGADU_SMTP_HOST: ${MIGADU_SMTP_HOST:-smtp.migadu.com}
+      MIGADU_SMTP_PORT: ${MIGADU_SMTP_PORT:-587}
+      MAILBOX_PASSWORD_PATTERN: ${MAILBOX_PASSWORD_PATTERN:?MAILBOX_PASSWORD_PATTERN is required}
+      MAILBOX_PASSWORD_BACKEND: ${MAILBOX_PASSWORD_BACKEND:-}
+      MAILBOX_PASSWORD_AZABOT: ${MAILBOX_PASSWORD_AZABOT:-}
+      MAILBOX_PASSWORD_AUTH: ${MAILBOX_PASSWORD_AUTH:-}
+      MAILBOX_PASSWORD_PROD: ${MAILBOX_PASSWORD_PROD:-}
+      MAILBOX_PASSWORD_MAINT: ${MAILBOX_PASSWORD_MAINT:-}
+      MAILBOX_PASSWORD_CORE: ${MAILBOX_PASSWORD_CORE:-}
+      MAILBOX_PASSWORD_BIM: ${MAILBOX_PASSWORD_BIM:-}
+      MAILBOX_PASSWORD_FINANCE: ${MAILBOX_PASSWORD_FINANCE:-}
+      MAILBOX_PASSWORD_PAYMENTS: ${MAILBOX_PASSWORD_PAYMENTS:-}
+      MAILBOX_PASSWORD_COPILOT: ${MAILBOX_PASSWORD_COPILOT:-}
+      MAILBOX_PASSWORD_PROJECT: ${MAILBOX_PASSWORD_PROJECT:-}
+      MAILBOX_PASSWORD_VISION: ${MAILBOX_PASSWORD_VISION:-}
+      COMPANY_NAME: ${COMPANY_NAME:-شركة العزب}
+      COMPANY_WEBSITE_URL: ${COMPANY_WEBSITE_URL:-https://alazab.com}
+      EMAIL_LOGO_URL: ${EMAIL_LOGO_URL:-https://alazab.com/w.gif}
+      EXPECTED_TEMPLATE_COUNT: ${EXPECTED_TEMPLATE_COUNT:-144}
+      TEMPLATES_DIR: /app/templates
+    ports:
+      - "127.0.0.1:3300:3300"
+    volumes:
+      - /var/lib/az-agent-call/data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    stop_grace_period: 20s

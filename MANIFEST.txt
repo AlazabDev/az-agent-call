@@ -1,0 +1,50 @@
+Az Agent Call v3.0.1 — Production Manifest
+
+project=az-agent-call
+version=3.0.1
+supabase_project=alazab-db
+supabase_project_ref=bxuhcbfdoaflsgbxiqei
+public_url=https://mcp.alazab.com
+admin_url=https://mcp.alazab.com/admin/
+mcp_url=https://mcp.alazab.com/call
+public_health_url=https://mcp.alazab.com/healthz
+local_ready_url=http://127.0.0.1:3300/readyz
+production_migrations=3
+edge_function=agent-call-status
+edge_function_version=3
+edge_function_verify_jwt=true
+agents=12
+template_meta=144
+template_html=144
+template_txt=144
+template_access=global
+ui_template_files=49
+page_files=18
+project_files=567
+executable_ts_tsx_files=101
+mailbox_password_overrides=12
+production_env_mode=0600
+archive_layout=root-flat
+
+Validation summary:
+- TypeScript syntax: 101 files / 0 syntax errors
+- Local imports: 374 checked / 0 missing
+- Undeclared external imports: 0
+- UI template restoration: 49/49 byte-identical files
+- Template global render: 144 native + 144 through core = 288 successful
+- MCP sender identity: From/Reply-To locked server-side
+- Admin test-send: strict recipient validation + subject sanitization
+- Bash deployment scripts: syntax OK
+- docker-compose.yml: YAML parse OK
+- Nginx: nginx -t successful
+- Public readiness details: blocked at Nginx; local readiness only
+- Secret literal isolation: production credentials only in .env.production
+- Full npm/Vite/Docker build: target-server gate (registry/Docker unavailable here)
+
+Runtime production gate:
+- real SUPABASE_SERVICE_ROLE_KEY must be supplied server-side
+- Docker build must pass
+- /healthz must pass
+- local /readyz must pass
+- all 12 Migadu SMTP AUTH checks must pass
+- nginx -t and local TLS reverse-proxy verification must pass

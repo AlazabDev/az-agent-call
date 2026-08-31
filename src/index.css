@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 14% 97%;
+    --foreground: 232 54% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 232 54% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 232 54% 13%;
+    --primary: 237 93% 18%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 18% 95%;
+    --secondary-foreground: 232 54% 13%;
+    --muted: 220 18% 95%;
+    --muted-foreground: 218 12% 44%;
+    --accent: 43 100% 50%;
+    --accent-foreground: 237 93% 18%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 16% 89%;
+    --input: 220 16% 89%;
+    --ring: 237 93% 18%;
+    --radius: 0.75rem;
+    --sidebar-background: 237 93% 15%;
+    --sidebar-foreground: 220 18% 82%;
+    --sidebar-primary: 43 100% 50%;
+    --sidebar-primary-foreground: 237 93% 15%;
+    --sidebar-accent: 237 63% 23%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 237 50% 24%;
+    --sidebar-ring: 43 100% 50%;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; margin: 0; min-width: 320px; min-height: 100vh; }
+}
+
+@layer utilities {
+  .gradient-primary { background: linear-gradient(135deg, #030957, #111a77); }
+  .gradient-warm { background: linear-gradient(135deg, #FFB900, #f59e0b); }
+  .shadow-card { box-shadow: 0 1px 3px rgb(15 23 42 / 0.04), 0 1px 2px -1px rgb(15 23 42 / 0.04); }
+  .shadow-card-hover { box-shadow: 0 8px 20px rgb(15 23 42 / 0.08), 0 2px 5px rgb(15 23 42 / 0.04); }
+  .status-dot { @apply inline-block h-2.5 w-2.5 rounded-full; }
+}
