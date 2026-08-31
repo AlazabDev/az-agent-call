@@ -1,3 +1,4 @@
+import process from "node:process";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod";
 import type { RuntimeAgent } from "../../agents.js";
