@@ -119,23 +119,23 @@ export default function Accounts() {
 
   return (
     <AppLayout
-      title="صناديق بريد الوكلاء"
-      subtitle="12 هوية ثابتة على alazab.com — SMTP + Foundry + Tokens"
+      title="قنوات الاتصال ودليل التمديدات"
+      subtitle="12 خط اتصال وهوية ثابتة على alazab.com — SIP / Telephony + Foundry + Daftra ERP"
       actions={<Button size="sm" variant="outline" onClick={() => void agentsQuery.refetch()} className="gap-2"><RefreshCw className="h-4 w-4" /> تحديث</Button>}
     >
       <div className="space-y-6" dir="rtl">
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Mailboxes</p><p className="text-2xl font-bold mt-1">{agents.length || 12}</p><Progress value={(agents.length / 12) * 100} className="mt-3" /></CardContent></Card>
-          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">SMTP ready</p><p className="text-2xl font-bold mt-1">{stats.configured}/12</p><p className="text-[10px] text-muted-foreground mt-2">Pattern أو Override</p></CardContent></Card>
-          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Token initialized</p><p className="text-2xl font-bold mt-1">{stats.tokens}/12</p><p className="text-[10px] text-muted-foreground mt-2">Persistent volume</p></CardContent></Card>
-          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Online</p><p className="text-2xl font-bold mt-1">{stats.online}/12</p><p className="text-[10px] text-muted-foreground mt-2">Activity ≤ 10 min</p></CardContent></Card>
-          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Overrides</p><p className="text-2xl font-bold mt-1">{stats.override}</p><p className="text-[10px] text-muted-foreground mt-2">{stats.pattern} على النمط المشترك</p></CardContent></Card>
+          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">SIP Extensions</p><p className="text-2xl font-bold mt-1">{agents.length || 12}</p><Progress value={(agents.length / 12) * 100} className="mt-3" /></CardContent></Card>
+          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Telephony Lines</p><p className="text-2xl font-bold mt-1">{stats.configured}/12</p><p className="text-[10px] text-muted-foreground mt-2">SIP & SMTP Gateway</p></CardContent></Card>
+          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Daftra ERP Status</p><p className="text-2xl font-bold mt-1 text-emerald-600">Connected</p><p className="text-[10px] text-muted-foreground mt-2">daftra.alazab.com</p></CardContent></Card>
+          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Online Agents</p><p className="text-2xl font-bold mt-1">{stats.online}/12</p><p className="text-[10px] text-muted-foreground mt-2">Activity ≤ 10 min</p></CardContent></Card>
+          <Card className="shadow-card"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tokens Ready</p><p className="text-2xl font-bold mt-1">{stats.tokens}/12</p><p className="text-[10px] text-muted-foreground mt-2">MCP Bearer Auth</p></CardContent></Card>
         </div>
 
         <Alert>
           <ShieldCheck className="h-4 w-4" />
-          <AlertTitle>هوية الإرسال غير قابلة للتغيير</AlertTitle>
-          <AlertDescription>كل Bearer Token يحدد Agent واحدًا وصندوق بريد واحدًا. حتى عند استخدام قالب تابع لنظام آخر يظل From وReply-To مساويين لصندوق الوكيل المصادق.</AlertDescription>
+          <AlertTitle>هوية خطوط الاتصال غير قابلة للتغيير</AlertTitle>
+          <AlertDescription>كل Bearer Token يحدد خط وكيل واحد ويدير هوية إجراء واستلام المكالمات والعمليات المحاسبية في دفتره بصورة آمنة ومقفولة سيرفرًا.</AlertDescription>
         </Alert>
 
         <Card className="shadow-card">
@@ -176,7 +176,7 @@ export default function Accounts() {
           <Card className="shadow-card"><CardHeader><CardTitle className="text-base flex items-center gap-2"><Activity className="h-4 w-4" /> Connection Semantics</CardTitle></CardHeader><CardContent className="space-y-3">{[["Online", "آخر MCP activity خلال 10 دقائق"],["whoami", "يسجل last_whoami_at كاختبار هوية واتصال"],["Offline", "يُستنتج تلقائيًا عند تقادم heartbeat"]].map(([title,text]) => <div key={title} className="rounded-lg border p-3"><p className="text-sm font-medium">{title}</p><p className="text-xs text-muted-foreground mt-1">{text}</p></div>)}</CardContent></Card>
         </div>
 
-        <Dialog open={Boolean(selected)} onOpenChange={(open) => { if (!open) setSelected(null); }}>
+        <Dialog open={Boolean(selected)} onOpenChange={(open: boolean) => { if (!open) setSelected(null); }}>
           <DialogContent className="max-w-3xl" dir="rtl">
             <DialogHeader><DialogTitle className="flex items-center gap-2"><UserRoundCog className="h-5 w-5" /> إدارة {selected?.id}</DialogTitle><DialogDescription>تفاصيل الهوية، Token، واختبار إرسال حقيقي من صندوق الوكيل.</DialogDescription></DialogHeader>
             {selected && <Tabs defaultValue="identity" className="space-y-4">

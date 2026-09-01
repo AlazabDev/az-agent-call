@@ -3,6 +3,7 @@
   "version": "3.0.1",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.15.4",
   "description": "Alazab Agent Call Center Hub — full React/Vite admin architecture + Supabase control plane + MCP/Telephony gateway.",
   "engines": {
     "node": ">=20"

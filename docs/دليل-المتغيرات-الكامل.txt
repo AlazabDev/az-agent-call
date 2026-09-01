@@ -1,0 +1,318 @@
+دليل-المتغيرات-الكامل
+العميل
+شركة العميل{%client_business_name%}
+كود العميل{%client_number%}
+اسم العميل الاول{%client_first_name%}
+اسم العميل الأخير{%client_last_name%}
+هاتف العميل{%client_phone%}
+جوال العميل{%client_mobile%}
+بريد العميل{%client_email%}
+عنوان العميل الكامل{%client_full_address%}
+شارع العميل{%client_address%}
+الرمز البريدي{%client_postcode%}
+المدينة{%client_city%}
+المنطقة{%client_state%}
+البلد{%client_country%}
+اسم العميل الثانوي{%client_secondary_name%}
+عنوان الشارع الثانوي{%client_secondary_address%}
+الرمز البريدي الثاني للعمبل{%client_secondary_postcode%}
+مدينة العميل الثاني{%client_secondary_city%}
+ولاية العميل الثاني{%client_secondary_state%}
+دولة العميل الثاني{%client_secondary_country%}
+سجل تجاري{%client_bn1%}
+بطاقة ضريبية{%client_bn2%}
+Client Business Info 1{%client_business_registration_info1%}
+Client Business Info 2{%client_business_registration_info2%}
+باركود العميل{%client_barcode%}
+رقم باركود العميل{%client_barcode_number%}
+Client photo{%client_photo%}
+Client Status Name{%client_status_name%}
+تصنيف العميل{%client_category%}
+الحد الإتماني{%client_credit_limit%}
+فترة السماح{%client_credit_period%}
+مكان العميل{%client_location%}
+Client Starting Balance{%client_starting_balance%}
+Client National ID{%client_national_id%}
+الرابط{%link%}
+- العميل{%custom__field_7%}
+رقم العقد - العميل{%custom_رقم_العقد_field_1%}
+حالة العقد - العميل{%custom_حالة_العقد_field_2%}
+نوع العقد - العميل{%custom_نوع_العقد_field_3%}
+- العميل{%custom__field_4%}
+رقم الوحدة - العميل{%custom_رقم_الوحدة_field_5%}
+نوع الوحدة - العميل{%custom_نوع_الوحدة_field_6%}
+الموقع - العميل{%custom_الموقع_field_39%}
+رفع ملف - العميل{%custom_رفع_ملف_field_40%}
+العميل - معرف الفرع{%client_branch_id%}
+العميل - Branch Code{%client_branch_code%}
+العميل - Branch Name{%client_branch_name%}
+العميل - Branch Phone1{%client_branch_phone1%}
+العميل - Branch Phone2{%client_branch_phone2%}
+العميل - Branch Address1{%client_branch_address1%}
+العميل - Branch Address2{%client_branch_address2%}
+العميل - Branch City{%client_branch_city%}
+العميل - Branch State{%client_branch_state%}
+العميل - Branch Country{%client_branch_country%}
+العميل - Branch Location{%client_branch_map_location%}
+الرقم التعريفي للعضوية{%client_membership_id%}
+تاريخ إنتهاء العضوية{%client_membership_expiry_date%}
+تاريخ بداية العضوية{%client_membership_join_date%}
+الباقة الحالية للعضوية{%client_membership_current_package%}
+فاتورة
+اسم العميل التجاري{%client_business_name%}
+اسم العميل{%client_name%}
+اسم العميل الاول{%client_first_name%}
+اسم العميل الأخير{%client_last_name%}
+عنوان العميل{%client_address%}
+مدينة العميل{%client_city%}
+محافظة/منطقة العميل{%client_state%}
+الرقم البريدي للعميل{%client_postal_code%}
+بلد العميل{%client_country%}
+كود العميل{%client_number%}
+رقم الفاتورة{%invoice_no%}
+Invoice Order No{%invoice_order_no%}
+تاريخ الفاتورة{%invoice_date%}
+Invoice Manual Status{%manual_status%}
+تاريخ الاستحقاق{%due_date%}
+تاريخ الإصدار{%issue_date%}
+Invoice subtotal{%invoice_subtotal%}
+إجمالي الفاتورة{%invoice_total%}
+المبلغ الواجب دفعه{%deposit%}
+القيمة المدفوعة{%paid%}
+المبلغ المتبقي{%unpaid%}
+الخصم{%discount%}
+أجمالى الضرائب{%tax-total%}
+Item discount Total{%item-discount-total%}
+رابط الدفع{%payment_link%}
+رابط العرض{%view_link%}
+رابط قصير{%short-link%}
+ملاحظات الفاتورة{%invoice_notes%}
+باركود الفاتوره{%invoice_barcode%}
+رقم باركود الفاتوره{%invoice_barcode_number%}
+Invoice currency code{%invoice_currency_code%}
+تاريخ الإنشاء{%created_date%}
+وقت الإنشاء{%created_time%}
+Client view link{%client_view_link%}
+QR Code Link{%qr_code_link%}
+QR Code Image{%qr_code_image%}
+Owner view link{%owner_view_link%}
+المستودع{%ware_house%}
+Sales person{%sales_person%}
+Invoice Item Count{%invoice_item_count%}
+Invoice quantity count{%invoice_item_qty%}
+Invoice payment status{%invoice_payment_status%}
+Client Balance{%extra_details.client_balance%}
+Advanced Client balance{%invoice_advanced_client_balance%}
+Invoice Payment List{%invoice_payment_table%}
+مصدر الطلب{%order_source%}
+نوع الفاتورة{%invoice_type%}
+تفقيط إجمالي الفاتورة{%invoice_total_spelled%}
+تفقيط المبلغ الواجب دفعه{%deposit_spelled%}
+تفقيط القيمة المدفوعة{%paid_spelled%}
+تفقيط المبلغ المتبقي{%unpaid_spelled%}
+تفقيط الخصم{%discount_spelled%}
+- العميل{%custom__field_7%}
+رقم العقد - العميل{%custom_رقم_العقد_field_1%}
+حالة العقد - العميل{%custom_حالة_العقد_field_2%}
+نوع العقد - العميل{%custom_نوع_العقد_field_3%}
+- العميل{%custom__field_4%}
+رقم الوحدة - العميل{%custom_رقم_الوحدة_field_5%}
+نوع الوحدة - العميل{%custom_نوع_الوحدة_field_6%}
+الموقع - العميل{%custom_الموقع_field_39%}
+رفع ملف - العميل{%custom_رفع_ملف_field_40%}
+البريد الإلكتروني - فاتورة{%custom_البريد_الإلكتروني_field_42%}
+Invoice - معرف الفرع{%invoice_branch_id%}
+Invoice - Branch Code{%invoice_branch_code%}
+Invoice - Branch Name{%invoice_branch_name%}
+Invoice - Branch Phone1{%invoice_branch_phone1%}
+Invoice - Branch Phone2{%invoice_branch_phone2%}
+Invoice - Branch Address1{%invoice_branch_address1%}
+Invoice - Branch Address2{%invoice_branch_address2%}
+Invoice - Branch City{%invoice_branch_city%}
+Invoice - Branch State{%invoice_branch_state%}
+Invoice - Branch Country{%invoice_branch_country%}
+Invoice - Branch Location{%invoice_branch_map_location%}
+مدفوعات الفواتير
+رقم الدفع{%invoice_payment_No%}
+وسيلة الدفع{%payment_method%}
+أسم وسيلة الدفع{%payment_method_display%}
+المبلغ{%amount%}
+العملة{%currency_code%}
+أضيف بواسطة{%added_by%}
+التاريخ{%date%}
+تاريخ الإصدار{%issue_date%}
+البريد الإلكتروني{%email%}
+الحالة{%status%}
+حالة الدفع{%payment_status%}
+الملاحظات{%notes%}
+Response code{%response_code%}
+Response message{%response_message%}
+First name{%first_name%}
+Last name{%last_name%}
+العنوان 1{%address1%}
+العنوان 2{%address2%}
+المدينة{%city%}
+المنطقة{%state%}
+الرمز البريدي{%postal_code%}
+Country code{%country_code%}
+رقم المحمول{%phone1%}
+رقم الهاتف{%phone2%}
+Receipt notes{%receipt_notes%}
+المرفق{%invoice_payment_attachment%}
+رقم معّرف للتحويل{%transaction_id%}
+خزينة{%treasury_name%}
+تفقيط{%spelled_amount%}
+بيانات العمل
+اسم الشركة الاول{%site_first_name%}
+اسم الشركة الأخير{%site_last_name%}
+نطاق الشركة{%subdomain%}
+الاسم التجاري{%site_business_name%}
+بريد الشركة{%site_business_email%}
+عنوان الشركة 1{%site_address1%}
+عنوان الشركة 2{%site_address2%}
+مدينة الشركة{%site_city%}
+محافظة الشركة{%site_state%}
+الرقم البريدي للشركة{%site_postal_code%}
+هاتف الشركة{%site_telephone%}
+جوال الشركة{%site_mobile%}
+Current Time{%current_time%}
+Site Logo{%site_logo%}
+Business Full Address{%full_business_address%}
+اسم النطاق الرئيسي{%domain_name_only%}
+bn1 Code{%site_bn1%}
+سجل تجاري{%site_bn1_label%}
+bn2 Code{%site_bn2%}
+بطاقة ضريبية{%site_bn2_label%}
+المورد
+اسم شركة المورد{%supplier_business_name%}
+رقم المورد{%supplier_number%}
+اسم المورد الاول{%supplier_first_name%}
+اسم المورد الاخير{%supplier_last_name%}
+هاتف المورد{%supplier_phone%}
+Supplier Mobile{%supplier_mobile%}
+بريد المورد{%supplier_email%}
+Supplier Full Address{%supplier_full_address%}
+عنوان المورد{%supplier_address%}
+الرمز البريدي{%supplier_postcode%}
+المدينة{%supplier_city%}
+المنطقة{%supplier_state%}
+البلد{%supplier_country%}
+Supplier Secondary Name{%supplier_secondary_name%}
+عنوان الشارع الثانوي{%supplier_secondary_address%}
+Supplier Secondary Postcode{%supplier_secondary_postcode%}
+Supplier Secondary City{%supplier_secondary_city%}
+Supplier Secondary State{%supplier_secondary_state%}
+Supplier Secondary Country{%supplier_secondary_country%}
+سجل تجاري{%supplier_bn1%}
+بطاقة ضريبية{%supplier_bn2%}
+Supplier Business Info 1{%supplier_business_registration_info1%}
+Supplier Business Info 2{%supplier_business_registration_info2%}
+Multiple Dropdown{%le_custom_data_supplier_multiple_dropdown%}
+Supplier - معرف الفرع{%supplier_branch_id%}
+Supplier - Branch Code{%supplier_branch_code%}
+Supplier - Branch Name{%supplier_branch_name%}
+Supplier - Branch Phone1{%supplier_branch_phone1%}
+Supplier - Branch Phone2{%supplier_branch_phone2%}
+Supplier - Branch Address1{%supplier_branch_address1%}
+Supplier - Branch Address2{%supplier_branch_address2%}
+Supplier - Branch City{%supplier_branch_city%}
+Supplier - Branch State{%supplier_branch_state%}
+Supplier - Branch Country{%supplier_branch_country%}
+Supplier - Branch Location{%supplier_branch_map_location%}
+فواتير الشراء
+الاسم التجاري{%business_name%}
+بريد الشركة{%business_email%}
+عنوان الشركة 1{%address1%}
+عنوان الشركة 2{%address2%}
+مدينة الشركة{%city%}
+محافظة الشركة{%state%}
+الرمز البريدي{%postal_code%}
+هاتف الشركة{%telephone%}
+جوال الشركة{%mobile%}
+اسم شركة المورد{%supplier_business_name%}
+اسم المورد{%supplier_name%}
+عنوان المورد{%supplier_address%}
+مدينة المورد{%supplier_city%}
+ولاية المورد{%supplier_state%}
+الرقم البريدي للمورد{%supplier_postal_code%}
+بلد المورد{%supplier_country%}
+رقم فاتورة الشراء{%purchaseorders_no%}
+تاريخ فاتورة الشراء{%purchaseorders_date%}
+إجمالي فاتورة الشراء{%purchaseorders_total%}
+PurchaseOrder note{%po_note%}
+المستودع{%ware_house%}
+Purchase Invoice quantity count{%po_item_qty%}
+الخصم{%discount%}
+Item discount Total{%item-discount-total%}
+Purchase Invoice Tax total{%purchaseorder_tax_total%}
+Purchase Invoice subtotal{%purchaseorder_subtotal%}
+أجمالى الضرائب{%tax-total%}
+رصيد المورد{%extra_details.supplier_balance%}
+Advanced Supplier balance{%purchase_order_advanced_supplier_balance%}
+رقم فاتورة الشراء{%purchase_order_no%}
+Purchase Invoice total Spelled{%purchaseorder_total_spelled%}
+Purchase Invoice total tax Spelled{%purchaseorder_total_tax_spelled%}
+Purchase Order - معرف الفرع{%purchase_order_branch_id%}
+Purchase Order - Branch Code{%purchase_order_branch_code%}
+Purchase Order - Branch Name{%purchase_order_branch_name%}
+Purchase Order - Branch Phone1{%purchase_order_branch_phone1%}
+Purchase Order - Branch Phone2{%purchase_order_branch_phone2%}
+Purchase Order - Branch Address1{%purchase_order_branch_address1%}
+Purchase Order - Branch Address2{%purchase_order_branch_address2%}
+Purchase Order - Branch City{%purchase_order_branch_city%}
+Purchase Order - Branch State{%purchase_order_branch_state%}
+Purchase Order - Branch Country{%purchase_order_branch_country%}
+Purchase Order - Branch Location{%purchase_order_branch_map_location%}
+المشروع
+رقم المشروع{%work_order_number%}
+عنوان المشروع{%work_order_title%}
+تاريخ ابتداء المشروع{%work_order_start_date%}
+تاريخ تسليم المشروع{%work_order_delivery_date%}
+وصف المشروع{%work_order_description%}
+ميزانية المشروع{%work_order_budget%}
+عملة ميزانية المشروع{%work_order_budget_currency%}
+حالة المشروع{%work_order_status%}
+Work Order Follow up status{%work_order_follow_up_status%}
+إجمالي المدفوع لالمشروع{%work_order_spent%}
+شريط تقدم ميزانية المشروع{%work_order_budget_progress%}
+حركة حساب المشروع{%work_order_transaction_list%}
+حركة حساب المشروع{%work_order_transaction_list_title%}
+Work Order Financial List{%work_order_financial_list%}
+Work Order Financial List{%work_order_financial_list_title%}
+Invoiced Products{%work_order_invoiced_products%}
+الموظف المعين ﻷمر الشغل{%work_order_assigned_staffs%}
+رقم جوال الموظف المعين ﻷمر الشغل{%work_order_assigned_staffs_mobile_number%}
+رقم هاتف الموظف المعين ﻷمر الشغل{%work_order_assigned_staffs_phone_number%}
+التاريخ المحلي الحالي{%current_date%}
+الوقت المحلي الحالي{%current_datetime%}
+نوع الاعمال المطلوب - WorkOrder{%custom_نوع_الاعمال_المطلوب_field_43%}
+الموقع - WorkOrder{%custom_الموقع_field_44%}
+معرض الصور - WorkOrder{%custom_معرض_الصور_field_45%}
+حالة المشروع - WorkOrder{%custom_حالة_المشروع_field_46%}
+عنوان الموقع - WorkOrder{%custom_عنوان_الموقع_field_17%}
+مساحة الموقع - WorkOrder{%custom_مساحة_الموقع_field_18%}
+عدد الغرف - WorkOrder{%custom_عدد_الغرف_field_19%}
+رفع صورة - WorkOrder{%custom_رفع_صورة_field_28%}
+- WorkOrder{%custom__field_33%}
+موظف
+اسم الموظف{%staff_member_name%}
+البريد الإلكتروني للموظف{%staff_member_email%}
+هاتف الموظف{%staff_member_phone%}
+جوال الموظف{%staff_member_mobile%}
+عنوان الموظف 1{%staff_member_address1%}
+عنوان الموظف 2{%staff_member_address2%}
+مدينة الموظف{%staff_member_city%}
+ولاية الموظف{%staff_member_state%}
+الرقم البريدي للموظف{%staff_member_postalcode%}
+بلد الموظف{%staff_member_country%}
+Staff - معرف الفرع{%staff_branch_id%}
+Staff - Branch Code{%staff_branch_code%}
+Staff - Branch Name{%staff_branch_name%}
+Staff - Branch Phone1{%staff_branch_phone1%}
+Staff - Branch Phone2{%staff_branch_phone2%}
+Staff - Branch Address1{%staff_branch_address1%}
+Staff - Branch Address2{%staff_branch_address2%}
+Staff - Branch City{%staff_branch_city%}
+Staff - Branch State{%staff_branch_state%}
+Staff - Branch Country{%staff_branch_country%}
+Staff - Branch Location{%staff_branch_map_location%}

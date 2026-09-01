@@ -297,3 +297,134 @@ apiRouter.post("/test-send", async (req: AdminRequest, res) => {
     res.json(await sendAsAgent(agent, { to: toResult.data, cc: safeCc, bcc: safeBcc, subject: safeSubject, text: text ? String(text).slice(0, 100_000) : undefined, html: html ? String(html).slice(0, 200_000) : undefined }, { mode: "admin-test" }));
   } catch (error) { res.status(500).json({ error: error instanceof Error ? error.message : String(error) }); }
 });
+
+/* ==========================================================================
+   Daftra ERP Integration API Routes
+   ========================================================================== */
+import { daftraService } from "./daftra/service.js";
+
+apiRouter.get("/daftra/health", async (_req, res) => {
+  try {
+    const health = await daftraService.checkHealth();
+    res.json(health);
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/daftra/clients", async (req, res) => {
+  try {
+    const query = req.query.query ? String(req.query.query) : undefined;
+    const phone = req.query.phone ? String(req.query.phone) : undefined;
+    const limit = req.query.limit ? parseInt(String(req.query.limit), 10) : 50;
+    const data = await daftraService.clients.listClients({ query, phone, limit });
+    res.json({ ok: true, data });
+  } catch (err: any) {
+    res.status(err.httpStatus || 500).json(err.toEnvelopeData ? err.toEnvelopeData() : { ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/daftra/clients/:id", async (req, res) => {
+  try {
+    const data = await daftraService.clients.getClient(String(req.params.id));
+    res.json({ ok: true, data });
+  } catch (err: any) {
+    res.status(err.httpStatus || 500).json(err.toEnvelopeData ? err.toEnvelopeData() : { ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/daftra/caller-context", async (req, res) => {
+  try {
+    const phone = String(req.query.phone || "");
+    if (!phone) return res.status(400).json({ ok: false, error: "Query parameter 'phone' is required" });
+    const data = await daftraService.clients.lookupCallerContext(phone);
+    res.json({ ok: true, data });
+  } catch (err: any) {
+    res.status(err.httpStatus || 500).json(err.toEnvelopeData ? err.toEnvelopeData() : { ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/daftra/invoices", async (req, res) => {
+  try {
+    const clientId = req.query.client_id ? parseInt(String(req.query.client_id), 10) : undefined;
+    const status = req.query.status ? String(req.query.status) : undefined;
+    const limit = req.query.limit ? parseInt(String(req.query.limit), 10) : 50;
+    const data = await daftraService.invoices.listInvoices({ client_id: clientId, status, limit });
+    res.json({ ok: true, data });
+  } catch (err: any) {
+    res.status(err.httpStatus || 500).json(err.toEnvelopeData ? err.toEnvelopeData() : { ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/daftra/products", async (req, res) => {
+  try {
+    const query = req.query.query ? String(req.query.query) : undefined;
+    const limit = req.query.limit ? parseInt(String(req.query.limit), 10) : 50;
+    const data = await daftraService.products.listProducts({ query, limit });
+    res.json({ ok: true, data });
+  } catch (err: any) {
+    res.status(err.httpStatus || 500).json(err.toEnvelopeData ? err.toEnvelopeData() : { ok: false, error: err.message });
+  }
+});
+
+/* ==========================================================================
+   WhatsApp Multi-WABA Hub & Central Webhooks API Routes
+   ========================================================================== */
+import { whatsappService } from "./whatsapp/service.js";
+import { handleWhatsAppWebhookVerify, handleWhatsAppWebhookEvent, handleDaftraWebhookEvent } from "./webhooks/central.js";
+
+apiRouter.get("/whatsapp/numbers", async (_req, res) => {
+  try {
+    const numbers = await whatsappService.getNumbers();
+    res.json({ ok: true, count: numbers.length, data: numbers });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+apiRouter.post("/whatsapp/send", async (req, res) => {
+  try {
+    const { phoneNumberId, recipientPhone, text, templateName, daftraClientId, agentId } = req.body || {};
+    if (!recipientPhone) return res.status(400).json({ ok: false, error: "recipientPhone is required" });
+
+    if (templateName) {
+      const result = await whatsappService.sendTemplateMessage({
+        phoneNumberId,
+        recipientPhone,
+        templateName,
+        daftraClientId,
+        agentId,
+      });
+      return res.json({ ok: result.ok, data: result });
+    }
+
+    if (!text) return res.status(400).json({ ok: false, error: "text or templateName is required" });
+
+    const result = await whatsappService.sendTextMessage({
+      phoneNumberId,
+      recipientPhone,
+      text,
+      daftraClientId,
+      agentId,
+    });
+    res.json({ ok: result.ok, data: result });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/whatsapp/logs", async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(String(req.query.limit), 10) : 100;
+    const logs = await whatsappService.getMessageLogs(limit);
+    res.json({ ok: true, count: logs.length, data: logs });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+apiRouter.get("/webhooks/whatsapp", handleWhatsAppWebhookVerify);
+apiRouter.post("/webhooks/whatsapp", handleWhatsAppWebhookEvent);
+apiRouter.post("/daftra/webhook", handleDaftraWebhookEvent);
+
+

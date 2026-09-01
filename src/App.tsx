@@ -13,6 +13,7 @@ import Clients from "@/pages/Clients";
 import Maintenance from "@/pages/Maintenance";
 import Teams from "@/pages/Teams";
 import Webhooks from "@/pages/Webhooks";
+import WhatsAppHub from "@/pages/WhatsAppHub";
 import Inbox from "@/pages/Inbox";
 import Finance from "@/pages/Finance";
 import Settings from "@/pages/Settings";
@@ -27,6 +28,7 @@ export default function App() {
       <Route path="/chat" element={<AgentChat />} />
       <Route path="/foundry" element={<FoundrySettings />} />
       <Route path="/agents" element={<Agents />} />
+      <Route path="/whatsapp" element={<WhatsAppHub />} />
       <Route path="/accounts" element={<Accounts />} />
       <Route path="/templates" element={<Templates />} />
       <Route path="/flows" element={<Flows />} />

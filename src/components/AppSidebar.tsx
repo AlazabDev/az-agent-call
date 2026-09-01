@@ -7,6 +7,7 @@ const operations = [
   { title: "لوحة التحكم", url: "/", icon: LayoutDashboard },
   { title: "المُتصل والدردشة", url: "/chat", icon: MessageSquare },
   { title: "الوكلاء وخطوط الاتصال", url: "/agents", icon: Bot },
+  { title: "إشعارات الوتساب (9 أرقام)", url: "/whatsapp", icon: MessageSquare },
   { title: "قنوات الاتصال SIP/DID", url: "/accounts", icon: Building2 },
   { title: "سيناريوهات الصوت 144", url: "/templates", icon: FileText },
   { title: "سجل المكالمات والتفريغ", url: "/inbox", icon: PhoneIncoming },

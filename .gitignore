@@ -6,4 +6,9 @@ dist-server
 !.env.example
 *.log
 data/
+backup_csv/
+account_cache.json
+*.sqlite
+*.sqlite3
+*.db
 .DS_Store
