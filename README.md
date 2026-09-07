@@ -1,4 +1,7 @@
-# Az Agent Mail v3.0.1
+# Az Agent Call Center v3.1.0
+
+> **Project identity:** this repository is the Alazab **Agent Call Center**. Email, Daftra, WhatsApp, MagicPlan and UberFix are integrations used by call-center agents; they do not redefine the project as a mail application. Existing Supabase `mail_*` table names are retained for backward-compatible data storage.
+
 
 Production control plane and MCP mail gateway for Alazab AI agents.
 
@@ -7,7 +10,7 @@ Production control plane and MCP mail gateway for Alazab AI agents.
 - **Admin UI:** React + Vite + TypeScript, restored on the full UI architecture supplied in `src-temp.zip` (49 shadcn/Radix components, sidebar layout, dialogs, tabs, tables, toasts, responsive hooks).
 - **Human authentication:** `/admin/` is protected by HTTP Basic at the Node gateway, then Supabase Password Auth and Alazab central RBAC (`adp_user_roles`).
 - **Agent authentication:** fixed bearer token per Foundry agent. Clear tokens are persisted in `/app/data/agent-tokens.json`; Supabase stores SHA-256 hashes/hints only.
-- **MCP:** `POST https://mcp.alazab.com/mail`.
+- **MCP:** `https://mcp.alazab.com/call` — MCP Streamable HTTP for Azure Foundry (GET/POST handled by the MCP transport).
 - **SMTP:** Migadu STARTTLS on `smtp.migadu.com:587`.
 - **Data:** Supabase production project `alazab-db` (`bxuhcbfdoaflsgbxiqei`).
 - **Templates:** 144 shared templates. Original agent ownership is now recommendation metadata only; every authenticated agent can list, render and send every template.
@@ -94,13 +97,13 @@ The supplied production environment contains the 12 per-agent Migadu overrides p
 Target path:
 
 ```text
-/var/www/apps/az-agent-mail
+/var/www/apps/az-agent-call
 ```
 
 Persistent data:
 
 ```text
-/var/lib/az-agent-mail/data
+/var/lib/az-agent-call/data
 ```
 
 ### 1. Extract the production archive
@@ -108,15 +111,15 @@ Persistent data:
 The production ZIP is **root-flat**: `package.json`, `.env.production`, `Dockerfile`, etc. are stored at the archive root. Extract it directly into the application directory:
 
 ```bash
-install -d -m 0750 /var/www/apps/az-agent-mail
-unzip az-agent-mail-v3.0.1-production.zip -d /var/www/apps/az-agent-mail
-cd /var/www/apps/az-agent-mail
+install -d -m 0750 /var/www/apps/az-agent-call
+unzip az-agent-call-v3.1.0-production.zip -d /var/www/apps/az-agent-call
+cd /var/www/apps/az-agent-call
 ```
 
-After extraction, this must exist directly (with no extra nested `az-agent-mail-v3/` directory):
+After extraction, this must exist directly (with no extra nested `az-agent-call-v3/` directory):
 
 ```bash
-test -f /var/www/apps/az-agent-mail/package.json
+test -f /var/www/apps/az-agent-call/package.json
 ```
 
 ### 2. Complete the one unavailable server secret
@@ -166,7 +169,7 @@ Expected endpoints:
 
 ```text
 Public: https://mcp.alazab.com/admin/
-Public: https://mcp.alazab.com/mail
+Public: https://mcp.alazab.com/call
 Public: https://mcp.alazab.com/healthz
 Local only: http://127.0.0.1:3300/readyz
 ```
@@ -178,13 +181,13 @@ The Nginx edge intentionally returns **403** for public `/readyz` so token-store
 On first successful startup, missing tokens are securely generated and saved to:
 
 ```text
-/var/lib/az-agent-mail/data/agent-tokens.json
+/var/lib/az-agent-call/data/agent-tokens.json
 ```
 
 To inspect them on the server:
 
 ```bash
-cat /var/lib/az-agent-mail/data/agent-tokens.json
+cat /var/lib/az-agent-call/data/agent-tokens.json
 ```
 
 Use the corresponding token in each Foundry MCP connection, then call `whoami`.

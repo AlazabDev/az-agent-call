@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🤖 Codex Agent - مركز التحكم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0b2b44;
+            --primary-light: #1f6e8c;
+            --primary-dark: #071e2f;
+            --accent: #4fc3f7;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --bg: #f0f4f8;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #1a2332;
+            --text-light: #5a6a7a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 🔹 الشريط الجانبي */
+        .sidebar {
+            width: 280px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header .status {
+            font-size: 12px;
+            background: var(--success);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav .nav-item {
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .sidebar-nav .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav .nav-item.active {
+            background: var(--primary-light);
+        }
+
+        .sidebar-nav .nav-item .badge {
+            background: var(--accent);
+            color: var(--primary);
+            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 12px;
+            margin-right: auto;
+        }
+
+        /* 🔹 المحتوى الرئيسي */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 🔹 شريط الأدوات العلوي */
+        .toolbar {
+            background: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e8ecf0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .toolbar .left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar .right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toolbar .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .toolbar .agent-info .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .toolbar .agent-info .dot.online {
+            background: var(--success);
+        }
+
+        .toolbar .agent-info .dot.offline {
+            background: var(--error);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(11, 43, 68, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e8ecf0;
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #d5d9df;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #43a047;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        /* 🔹 منطقة الدردشة */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-area .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .chat-area .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .chat-area .empty-state p {
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        /* 💬 الرسائل */
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 16px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant {
+            align-self: flex-start;
+            background: white;
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .message.system {
+            align-self: center;
+            background: #fff3e0;
+            color: #e65100;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            max-width: 90%;
+        }
+
+        .message .meta {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message .meta .time {
+            font-size: 10px;
+        }
+
+        .message .tool-call {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .message .tool-call .label {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 🔹 المدخل السفلي */
+        .input-area {
+            background: white;
+            padding: 16px 24px;
+            border-top: 1px solid #e8ecf0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .input-area textarea {
+            flex: 1;
+            border: 2px solid #e8ecf0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
+            transition: border-color 0.2s;
+            background: #fafbfc;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: white;
+        }
+
+        .input-area textarea:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .input-area .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-area .actions button {
+            padding: 10px 20px;
+            min-height: 48px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        /* 🔹 لوحة التحكم (تظهر على يمين الشاشة) */
+        .dev-panel {
+            width: 0;
+            overflow: hidden;
+            background: #0d1a26;
+            color: #b7e1f0;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dev-panel.open {
+            width: 400px;
+        }
+
+        .dev-panel .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dev-panel .panel-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8ab4d6;
+        }
+
+        .dev-panel .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .dev-panel .panel-body .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .dev-panel .panel-body .log-entry .time {
+            color: #4a7b96;
+            margin-left: 8px;
+        }
+
+        .dev-panel .panel-body .log-entry .level {
+            padding: 0 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .dev-panel .panel-body .log-entry .level.info {
+            background: #1f6e8c;
+            color: white;
+        }
+
+        .dev-panel .panel-body .log-entry .level.warn {
+            background: #ff9800;
+            color: white;
+        }
+
+        .dev-panel .panel-body .log-entry .level.error {
+            background: #f44336;
+            color: white;
+        }
+
+        .dev-panel .panel-body .log-entry .level.debug {
+            background: #4a7b96;
+            color: white;
+        }
+
+        /* 🔹 شريط الحالة السفلي */
+        .status-bar {
+            background: #0d1a26;
+            color: #8ab4d6;
+            padding: 6px 24px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 🔹 استجابة */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+                padding: 12px;
+            }
+            .dev-panel.open {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                padding: 8px 12px;
+                height: 60px;
+                overflow: hidden;
+            }
+            .sidebar-header h1 {
+                font-size: 16px;
+            }
+            .sidebar-nav {
+                display: none;
+            }
+            .dev-panel.open {
+                width: 100%;
+                height: 50%;
+            }
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* 🔹 سكرول مخصص */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c8d0;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0a8b0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🔹 الشريط الجانبي -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h1>🤖 Codex <span class="status">🟢 LIVE</span></h1>
+        <div style="font-size:12px; opacity:0.6; margin-top:4px;">مركز التحكم v3.1</div>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-item active">
+            💬 الدردشة
+            <span class="badge">جديد</span>
+        </div>
+        <div class="nav-item" onclick="toggleDevPanel()">
+            🛠️ لوحة المطور
+            <span class="badge">Beta</span>
+        </div>
+        <div class="nav-item">
+            📊 الإحصائيات
+            <span class="badge" id="statsBadge">0</span>
+        </div>
+        <div class="nav-item">
+            🔧 الأدوات
+            <span class="badge" id="toolsBadge">0</span>
+        </div>
+        <div class="nav-item" onclick="clearChat()">
+            🗑️ مسح الدردشة
+        </div>
+        <div class="nav-item" onclick="testConnection()">
+            🔌 اختبار الاتصال
+        </div>
+    </nav>
+    <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; font-size:12px; opacity:0.5;">
+        <div>الوكيل: <span id="agentNameDisplay">az-agent-codex</span></div>
+        <div>الإصدار: <span id="agentVersionDisplay">1</span></div>
+    </div>
+</aside>
+
+<!-- 🔹 المحتوى الرئيسي -->
+<div class="main-content">
+
+    <!-- شريط الأدوات -->
+    <div class="toolbar">
+        <div class="left">
+            <div class="agent-info">
+                <span class="dot online" id="statusDot"></span>
+                <span id="statusText">متصل</span>
+                <span style="opacity:0.4;">|</span>
+                <span id="conversationIdDisplay">لا توجد محادثة</span>
+            </div>
+        </div>
+        <div class="right">
+            <button class="btn btn-secondary btn-sm" onclick="toggleDevPanel()">
+                🛠️ Console
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="exportConversation()">
+                📥 تصدير
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="clearChat()">
+                🗑️ مسح
+            </button>
+        </div>
+    </div>
+
+    <!-- منطقة الدردشة -->
+    <div class="chat-area" id="chatArea">
+        <div class="empty-state" id="emptyState">
+            <h2>💬 مرحباً بك في Codex</h2>
+            <p>
+                اسأل الوكيل عن أي شيء متعلق بمركز الاتصال،
+                العملاء، المكالمات، أو المهام.<br />
+                يمكنك أيضاً اختبار الأدوات المدمجة.
+            </p>
+            <button class="btn btn-primary" style="margin-top:16px;" onclick="startNewConversation()">
+                🚀 بدء محادثة جديدة
+            </button>
+        </div>
+    </div>
+
+    <!-- مدخل الرسائل -->
+    <div class="input-area">
+        <textarea
+            id="messageInput"
+            placeholder="اكتب رسالتك هنا... (Enter للإرسال، Shift+Enter لسطر جديد)"
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+            disabled
+        ></textarea>
+        <div class="actions">
+            <button class="btn btn-primary" id="sendBtn" onclick="sendMessage()" disabled>
+                📤 إرسال
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="clearInput()">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <!-- شريط الحالة -->
+    <div class="status-bar">
+        <span id="statusBarLeft">🟢 جاهز</span>
+        <span id="statusBarRight">📝 0 رسائل · 🕐 <span id="currentTime"></span></span>
+    </div>
+</div>
+
+<!-- 🔹 لوحة المطور -->
+<div class="dev-panel" id="devPanel">
+    <div class="panel-header">
+        <h3>🛠️ سجلات المطور</h3>
+        <div>
+            <button class="btn btn-secondary btn-sm" onclick="clearLogs()">مسح</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleDevPanel()">✕</button>
+        </div>
+    </div>
+    <div class="panel-body" id="logContainer">
+        <div style="color:#4a7b96; text-align:center; padding:20px;">
+            🟢 النظام جاهز<br>
+            <span style="font-size:11px;">سيتم عرض الأحداث هنا</span>
+        </div>
+    </div>
+</div>
+
+<!-- 🔹 التكامل مع الوكيل -->
+<script type="module">
+    // ============================================================
+    // 🔌 تكامل مع وكيل Codex عبر WebSocket / HTTP
+    // ============================================================
+
+    import { CodexAgent } from '../../agents/codex/index.js';
+
+    // ─── الحالة العالمية ──────────────────────────────────────────
+    const state = {
+        agent: null,
+        conversationId: null,
+        messages: [],
+        isProcessing: false,
+        devPanelOpen: false,
+        logs: []
+    };
+
+    // ─── عناصر DOM ────────────────────────────────────────────────
+    const dom = {
+        chatArea: document.getElementById('chatArea'),
+        emptyState: document.getElementById('emptyState'),
+        messageInput: document.getElementById('messageInput'),
+        sendBtn: document.getElementById('sendBtn'),
+        statusDot: document.getElementById('statusDot'),
+        statusText: document.getElementById('statusText'),
+        conversationIdDisplay: document.getElementById('conversationIdDisplay'),
+        statusBarLeft: document.getElementById('statusBarLeft'),
+        statusBarRight: document.getElementById('statusBarRight'),
+        currentTime: document.getElementById('currentTime'),
+        logContainer: document.getElementById('logContainer'),
+        devPanel: document.getElementById('devPanel'),
+        statsBadge: document.getElementById('statsBadge'),
+        toolsBadge: document.getElementById('toolsBadge'),
+        agentNameDisplay: document.getElementById('agentNameDisplay'),
+        agentVersionDisplay: document.getElementById('agentVersionDisplay')
+    };
+
+    // ─── الأدوات المساعدة ──────────────────────────────────────────
+    function formatTime(date) {
+        return new Date(date).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function getCurrentTime() {
+        return formatTime(new Date());
+    }
+
+    function scrollToBottom() {
+        dom.chatArea.scrollTop = dom.chatArea.scrollHeight;
+    }
+
+    function disableInput(disabled) {
+        dom.messageInput.disabled = disabled;
+        dom.sendBtn.disabled = disabled;
+        dom.messageInput.placeholder = disabled ? '⏳ جاري المعالجة...' : 'اكتب رسالتك هنا...';
+    }
+
+    function updateStatus(status, message) {
+        dom.statusDot.className = `dot ${status}`;
+        dom.statusText.textContent = message;
+        dom.statusBarLeft.textContent = `${status === 'online' ? '🟢' : '🔴'} ${message}`;
+    }
+
+    function updateConversationId(id) {
+        dom.conversationIdDisplay.textContent = id ? `📌 ${id.substring(0, 12)}...` : 'لا توجد محادثة';
+    }
+
+    // ─── السجلات ──────────────────────────────────────────────────
+    function addLog(level, message, data) {
+        const entry = {
+            time: new Date(),
+            level,
+            message,
+            data
+        };
+        state.logs.push(entry);
+        renderLogs();
+    }
+
+    function renderLogs() {
+        if (!dom.logContainer) return;
+        if (state.logs.length === 0) {
+            dom.logContainer.innerHTML = `
+                <div style="color:#4a7b96; text-align:center; padding:20px;">
+                    🟢 النظام جاهز<br>
+                    <span style="font-size:11px;">سيتم عرض الأحداث هنا</span>
+                </div>
+            `;
+            return;
+        }
+
+        dom.logContainer.innerHTML = state.logs.map(log => `
+            <div class="log-entry">
+                <span class="time">${formatTime(log.time)}</span>
+                <span class="level ${log.level}">${log.level.toUpperCase()}</span>
+                ${log.message}
+                ${log.data ? `<span style="color:#4a7b96; font-size:11px;"> → ${JSON.stringify(log.data).substring(0, 100)}</span>` : ''}
+            </div>
+        `).join('');
+        dom.logContainer.scrollTop = dom.logContainer.scrollHeight;
+    }
+
+    // ─── عرض الرسائل ──────────────────────────────────────────────
+    function addMessage(role, content, meta = {}) {
+        const message = {
+            role,
+            content,
+            timestamp: new Date(),
+            ...meta
+        };
+        state.messages.push(message);
+        renderMessages();
+        return message;
+    }
+
+    function renderMessages() {
+        // إخفاء الحالة الفارغة
+        dom.emptyState.style.display = state.messages.length === 0 ? 'flex' : 'none';
+
+        // إزالة الرسائل القديمة (مع الاحتفاظ بالحالة الفارغة)
+        const existingMessages = dom.chatArea.querySelectorAll('.message');
+        existingMessages.forEach(el => el.remove());
+
+        // إضافة الرسائل
+        state.messages.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = `message ${msg.role}`;
+
+            let content = msg.content;
+            // إذا كانت تحتوي على أداة
+            if (msg.toolCall) {
+                content += `
+                    <div class="tool-call">
+                        <span class="label">🔧 ${msg.toolCall.name}</span>
+                        ${msg.toolCall.result ? `<br>📊 ${JSON.stringify(msg.toolCall.result, null, 2)}` : ''}
+                    </div>
+                `;
+            }
+
+            div.innerHTML = `
+                ${content}
+                <div class="meta">
+                    <span class="time">${formatTime(msg.timestamp)}</span>
+                    ${msg.role === 'assistant' ? '🤖' : '👤'}
+                    ${msg.conversationId ? `<span style="opacity:0.4;">#${msg.conversationId.substring(0, 6)}</span>` : ''}
+                </div>
+            `;
+
+            dom.chatArea.appendChild(div);
+        });
+
+        scrollToBottom();
+        updateStats();
+    }
+
+    function updateStats() {
+        dom.statsBadge.textContent = state.messages.length;
+        dom.statusBarRight.textContent = `📝 ${state.messages.length} رسائل · 🕐 ${getCurrentTime()}`;
+    }
+
+    // ─── تهيئة الوكيل ──────────────────────────────────────────────
+    async function initializeAgent() {
+        try {
+            addLog('info', '🚀 تهيئة وكيل Codex...');
+
+            const agent = new CodexAgent({
+                agentName: import.meta.env?.VITE_AGENT_NAME || 'az-agent-codex',
+                agentVersion: import.meta.env?.VITE_AGENT_VERSION || '1',
+                endpoint: import.meta.env?.VITE_AZURE_AI_ENDPOINT,
+                enableLogging: true
+            });
+
+            state.agent = agent;
+
+            // عرض معلومات الوكيل
+            dom.agentNameDisplay.textContent = 'az-agent-codex';
+            dom.agentVersionDisplay.textContent = '1';
+
+            // جلب الحالة
+            const status = await agent.getStatus();
+            dom.toolsBadge.textContent = status.tools.length;
+
+            addLog('info', `✅ الوكيل جاهز. الأدوات: ${status.tools.join(', ')}`);
+            updateStatus('online', 'متصل وجاهز');
+            disableInput(false);
+
+            // بدء محادثة افتراضية
+            await startNewConversation();
+
+            return agent;
+        } catch (error) {
+            addLog('error', '❌ فشل تهيئة الوكيل:', error.message);
+            updateStatus('offline', 'خطأ في الاتصال');
+            disableInput(true);
+            throw error;
+        }
+    }
+
+    // ─── بدء محادثة جديدة ──────────────────────────────────────────
+    async function startNewConversation() {
+        if (!state.agent) return;
+
+        try {
+            addLog('info', '📝 بدء محادثة جديدة...');
+            state.conversationId = null;
+            updateConversationId(null);
+
+            // إضافة رسالة ترحيب
+            addMessage('assistant', '👋 مرحباً! أنا وكيل Codex جاهز لمساعدتك.\n\nيمكنك سؤالي عن:\n• العملاء والمكالمات\n• المهام والأوامر\n• تحليل البيانات\n• أي شيء متعلق بمركز الاتصال');
+
+            // تحديث واجهة المستخدم
+            dom.conversationIdDisplay.textContent = '🔄 جاري إنشاء المحادثة...';
+
+            // إنشاء محادثة فعلية عبر الوكيل
+            const response = await state.agent.processRequest('مرحباً، أريد بدء محادثة جديدة');
+            if (response.conversationId) {
+                state.conversationId = response.conversationId;
+                updateConversationId(response.conversationId);
+                addLog('info', `✅ تم إنشاء المحادثة: ${response.conversationId}`);
+            }
+
+            return response;
+        } catch (error) {
+            addLog('error', '❌ فشل بدء المحادثة:', error.message);
+            throw error;
+        }
+    }
+
+    // ─── إرسال رسالة ──────────────────────────────────────────────
+    async function sendMessage() {
+        const input = dom.messageInput.value.trim();
+        if (!input || state.isProcessing || !state.agent) return;
+
+        // إضافة رسالة المستخدم
+        addMessage('user', input);
+        dom.messageInput.value = '';
+        dom.messageInput.style.height = 'auto';
+        state.isProcessing = true;
+        disableInput(true);
+        updateStatus('online', '⏳ جاري المعالجة...');
+
+        try {
+            addLog('info', `📩 إرسال: "${input.substring(0, 50)}..."`);
+
+            // إرسال إلى الوكيل
+            const response = await state.agent.processRequest({
+                message: input,
+                conversationId: state.conversationId
+            });
+
+            // تحديث معرف المحادثة
+            if (response.conversationId && !state.conversationId) {
+                state.conversationId = response.conversationId;
+                updateConversationId(response.conversationId);
+            }
+
+            // عرض الرد
+            addMessage('assistant', response.outputText, {
+                conversationId: state.conversationId
+            });
+
+            addLog('info', `✅ تم الرد: "${response.outputText.substring(0, 50)}..."`);
+
+            // تحديث الحالة
+            updateStatus('online', 'متصل');
+            disableInput(false);
+
+        } catch (error) {
+            addLog('error', '❌ فشل إرسال الرسالة:', error.message);
+            addMessage('system', `⚠️ عذراً، حدث خطأ: ${error.message}`);
+            updateStatus('online', 'متصل (مع أخطاء)');
+            disableInput(false);
+        } finally {
+            state.isProcessing = false;
+            dom.messageInput.focus();
+        }
+    }
+
+    // ─── أدوات إضافية ──────────────────────────────────────────────
+    function clearChat() {
+        if (state.messages.length === 0) return;
+        if (!confirm('هل تريد مسح جميع الرسائل؟')) return;
+        state.messages = [];
+        renderMessages();
+        addLog('info', '🗑️ تم مسح الدردشة');
+    }
+
+    function clearInput() {
+        dom.messageInput.value = '';
+        dom.messageInput.style.height = 'auto';
+        dom.messageInput.focus();
+    }
+
+    function toggleDevPanel() {
+        state.devPanelOpen = !state.devPanelOpen;
+        dom.devPanel.classList.toggle('open', state.devPanelOpen);
+        if (state.devPanelOpen) {
+            renderLogs();
+        }
+    }
+
+    function clearLogs() {
+        state.logs = [];
+        renderLogs();
+    }
+
+    function exportConversation() {
+        if (state.messages.length === 0) {
+            alert('لا توجد رسائل لتصديرها');
+            return;
+        }
+
+        const text = state.messages.map(msg => {
+            const role = msg.role === 'user' ? '👤 المستخدم' :
+                        msg.role === 'assistant' ? '🤖 الوكيل' : '📋 النظام';
+            return `[${formatTime(msg.timestamp)}] ${role}:\n${msg.content}\n${'-'.repeat(40)}`;
+        }).join('\n');
+
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `conversation-${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        addLog('info', '📥 تم تصدير المحادثة');
+    }
+
+    async function testConnection() {
+        try {
+            addLog('info', '🔌 اختبار الاتصال...');
+            if (!state.agent) {
+                await initializeAgent();
+            }
+            const status = await state.agent.getStatus();
+            addLog('info', '✅ الاتصال ناجح:', status);
+            alert(`✅ الاتصال ناجح!\nالإصدار: ${status.version}\nالأدوات: ${status.tools.length}`);
+        } catch (error) {
+            addLog('error', '❌ فشل الاتصال:', error.message);
+            alert(`❌ فشل الاتصال:\n${error.message}`);
+        }
+    }
+
+    // ─── معالجة الأحداث ──────────────────────────────────────────────
+    function handleKeyDown(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+
+    // ضبط ارتفاع الـ textarea تلقائياً
+    dom.messageInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    // ─── تحديث الوقت ──────────────────────────────────────────────
+    setInterval(() => {
+        dom.currentTime.textContent = getCurrentTime();
+    }, 1000);
+
+    // ─── جعل الدوال عامة للاستخدام في HTML ──────────────────────
+    window.sendMessage = sendMessage;
+    window.clearChat = clearChat;
+    window.clearInput = clearInput;
+    window.toggleDevPanel = toggleDevPanel;
+    window.clearLogs = clearLogs;
+    window.exportConversation = exportConversation;
+    window.testConnection = testConnection;
+    window.startNewConversation = startNewConversation;
+    window.handleKeyDown = handleKeyDown;
+
+    // ─── بدء التطبيق ──────────────────────────────────────────────
+    initializeAgent().catch(error => {
+        console.error('❌ فشل بدء التطبيق:', error);
+        addLog('error', '💥 فشل بدء التطبيق:', error.message);
+    });
+
+    // تصدير الأدوات للاستخدام من وحدة التحكم
+    console.log('🤖 Codex Agent UI loaded!');
+    console.log('📌 متغيرات متاحة:');
+    console.log('  - state (الحالة)');
+    console.log('  - sendMessage() (إرسال رسالة)');
+    console.log('  - clearChat() (مسح الدردشة)');
+    console.log('  - toggleDevPanel() (فتح لوحة المطور)');
+
+</script>
+
+</body>
+</html>

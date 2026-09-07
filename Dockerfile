@@ -4,15 +4,16 @@ ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_PUBLISHABLE_KEY
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY
-COPY package.json ./
-RUN npm install --no-audit --no-fund
+RUN npm install -g pnpm@9.15.4
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY tsconfig.json tsconfig.app.json tsconfig.server.json vite.config.ts tailwind.config.ts postcss.config.js index.html ./
 COPY src ./src
 COPY server ./server
 COPY shared ./shared
 COPY scripts ./scripts
 COPY templates ./templates
-RUN npm run build && npm prune --omit=dev
+RUN pnpm build && pnpm prune --prod
 
 FROM node:22-alpine AS runtime
 WORKDIR /app

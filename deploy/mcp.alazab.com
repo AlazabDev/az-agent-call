@@ -6,7 +6,6 @@ server {
 }
 
 server {
-    # Compatible with Ubuntu 24.04 stock Nginx 1.24 and newer releases.
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name mcp.alazab.com;
@@ -23,7 +22,10 @@ server {
     add_header X-Frame-Options DENY always;
     add_header Strict-Transport-Security "max-age=31536000" always;
 
-    location = /mail {
+    # Primary MCP Streamable HTTP endpoint for Azure Foundry.
+    # /mcp is an alias for clients that prefer the conventional MCP path.
+    # /mail is kept only for backwards compatibility with older agents.
+    location ~ ^/(call|mcp|mail)$ {
         proxy_pass http://127.0.0.1:3300;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -32,6 +34,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_buffering off;
         proxy_request_buffering off;
+        proxy_cache off;
         proxy_read_timeout 300s;
         proxy_send_timeout 300s;
     }

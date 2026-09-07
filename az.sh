@@ -32,6 +32,15 @@ case "$COMMAND" in
     logs)
         docker compose logs -f --tail=100 || true
         ;;
+    verify|check|validate)
+        bash scripts/ops/verify-environment.sh "${@:2}"
+       ;;
+    agent|codex)
+        echo "🤖 Codex Agent Commands:"
+        echo "  ./az.sh agent status   - Check agent status"
+        echo "  ./az.sh agent test     - Test agent connection"
+        echo "  ./az.sh agent chat     - Open chat interface"
+        ;;
     help|*)
         echo "================================================================="
         echo "  Az Agent Call — Alazab Agent Contact Center (az.sh Controller) "
@@ -46,6 +55,7 @@ case "$COMMAND" in
         echo "  healthcheck  Check system readiness, /healthz, and /readyz endpoints"
         echo "  nginx        Install Nginx site config for daftra.alazab.com on port 3400"
         echo "  logs         Tail live container logs"
+        echo "  agent        Codex Agent management commands"
         echo "  help         Display this help message"
         echo "================================================================="
         ;;

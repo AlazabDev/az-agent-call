@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-APP_DIR="${APP_DIR:-/var/www/apps/az-agent-mail}"
+APP_DIR="${APP_DIR:-/var/www/apps/az-agent-call}"
 ENV_FILE="${ENV_FILE:-$APP_DIR/.env.production}"
 [[ $EUID -eq 0 ]] || { echo "Run as root" >&2; exit 1; }
 [[ -f "$ENV_FILE" ]] || { echo "Missing $ENV_FILE" >&2; exit 1; }
@@ -13,7 +13,7 @@ for _ in $(seq 1 30); do
   sleep 2
 done
 curl -fsS http://127.0.0.1:3300/healthz | python3 -m json.tool || {
-  docker compose --env-file "$ENV_FILE" logs --tail=200 az-agent-mail >&2 || true
+  docker compose --env-file "$ENV_FILE" logs --tail=200 az-agent-call >&2 || true
   exit 1
 }
 for _ in $(seq 1 45); do
@@ -21,9 +21,10 @@ for _ in $(seq 1 45); do
   sleep 2
 done
 curl -fsS http://127.0.0.1:3300/readyz | python3 -m json.tool || {
-  docker compose --env-file "$ENV_FILE" logs --tail=200 az-agent-mail >&2 || true
+  docker compose --env-file "$ENV_FILE" logs --tail=200 az-agent-call >&2 || true
   exit 1
 }
-docker compose --env-file "$ENV_FILE" exec -T az-agent-mail node dist-server/scripts/verify-smtp.js
+docker compose --env-file "$ENV_FILE" exec -T az-agent-call node dist-server/scripts/verify-mcp.js
+docker compose --env-file "$ENV_FILE" exec -T az-agent-call node dist-server/scripts/verify-smtp.js || echo "WARNING: SMTP integration is not fully ready; core MCP remains running." >&2
 nginx -t
 systemctl reload nginx
