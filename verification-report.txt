@@ -2,8 +2,8 @@
   📊 تقرير التحقق من البيئة - Az Agent Call
 ═══════════════════════════════════════════════════════════════════════════════
 
-التاريخ: Sun Sep  6 21:25:08 EEST 2026
-المدة: 386 ثانية
+التاريخ: Mon Sep  7 10:30:40 EEST 2026
+المدة: 364 ثانية
 
 النتائج:
   ✅ ناجح: 50
@@ -12,25 +12,3 @@
   📝 المجموع: 0
 
 ═══════════════════════════════════════════════════════════════════════════════
-OS: Linux (x86_64)
-Distribution: Ubuntu 26.04
-User: azab
-Available space: 85G
-RAM: 7.7Gi available of 10Gi
-Node.js: v24.16.0
-pnpm: v11.24.0
-TypeScript: Version 7.0.2
-Git: v2.53.0
-  Branch: main (631a227)
-Docker: v29.7.2
-docker-compose: vversion
-  Dependencies: 55 | DevDependencies: 17
-  node_modules: 514M
-  AZURE_SUBSCRIPTION_ID = NOT SET
-  AZURE_AI_ENDPOINT = https://az-ai-resource.services.ai.azure.com/api/projects/az-ai-gateway
-  AGENT_NAME = az-agent-codex
-  AGENT_VERSION = 1
-  NODE_ENV = development
-  Azure: Microsoft Azure Sponsorship (1363114a-a1d7-4abb-8042-dcdebf91e2c9)
-  Docker: Connected (11 containers)
-  Tools: 1 files

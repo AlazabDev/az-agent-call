@@ -1,0 +1,20 @@
+[Unit]
+Description=Az Agent Call Center Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/var/www/apps/az-agent-call
+Environment=NODE_ENV=production
+EnvironmentFile=/var/www/apps/az-agent-call/.env.local
+ExecStart=/usr/bin/node dist-server/server/index.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=az-agent-call
+
+[Install]
+WantedBy=multi-user.target

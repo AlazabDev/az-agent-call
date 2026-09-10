@@ -1,55 +1,50 @@
-Az Agent Call Center v3.1.0 — Production Manifest
+Az Agent Call v3.0.1 — Production Manifest
 
 project=az-agent-call
-identity=Alazab Agent Call Center
-version=3.1.0
+version=3.0.1
 supabase_project=alazab-db
 supabase_project_ref=bxuhcbfdoaflsgbxiqei
 public_url=https://mcp.alazab.com
 admin_url=https://mcp.alazab.com/admin/
-mcp_url=https://mcp.alazab.com/call
-mcp_alias=https://mcp.alazab.com/mcp
-mcp_legacy_alias=https://mcp.alazab.com/mail
+mcp_url=https://mcp.alazab.com/mail
 public_health_url=https://mcp.alazab.com/healthz
 local_ready_url=http://127.0.0.1:3300/readyz
-host_path=/var/www/apps/az-agent-call
-persistent_data=/var/lib/az-agent-call/data
-container=az-agent-call
-production_migrations=6
-legacy_edge_function=agent-mail-status
+production_migrations=3
+edge_function=agent-mail-status
+edge_function_version=3
+edge_function_verify_jwt=true
 agents=12
 template_meta=144
 template_html=144
 template_txt=144
 template_access=global
+ui_template_files=49
+page_files=18
+project_files=567
+executable_ts_tsx_files=101
+mailbox_password_overrides=12
 production_env_mode=0600
 archive_layout=root-flat
 
-Production behavior:
-- Primary service identity is Agent Call Center.
-- Existing Supabase mail_* tables and agent-mail identifiers are retained for backward compatibility.
-- MCP primary transport is Streamable HTTP at /call; /mcp is an alias; /mail is legacy only.
-- MCP bearer identity is agent-specific and loaded from the persistent token store.
-- Daftra integration includes entity resolution and purchase invoice tools.
-- Telephony does not return mock success: Twilio executes only when fully configured.
-- UberFix/MagicPlan connectors fail explicitly when not configured; no fake success records.
-- S3/AWS is unrelated to this runtime.
-
 Validation summary:
-- Original ZIP files removed: 0
-- TypeScript/TSX syntax parse: 179 files / 0 syntax errors (tests excluded by production tsconfig)
-- Relative imports: 236 checked / 0 missing
-- Docker Compose YAML: valid
-- Docker Compose env references: complete against .env.production
+- TypeScript syntax: 101 files / 0 syntax errors
+- Local imports: 374 checked / 0 missing
+- Undeclared external imports: 0
+- UI template restoration: 49/49 byte-identical files
+- Template global render: 144 native + 144 through core = 288 successful
+- MCP sender identity: From/Reply-To locked server-side
+- Admin test-send: strict recipient validation + subject sanitization
 - Bash deployment scripts: syntax OK
-- Daftra paths/methods: checked against bundled OpenAPI
-- Full dependency-resolved build: target-server gate because construction runtime cannot resolve registry.npmjs.org
+- docker-compose.yml: YAML parse OK
+- Nginx: nginx -t successful
+- Public readiness details: blocked at Nginx; local readiness only
+- Secret literal isolation: production credentials only in .env.production
+- Full npm/Vite/Docker build: target-server gate (registry/Docker unavailable here)
 
-Target-server gates:
-- docker compose build --pull must pass
+Runtime production gate:
+- real SUPABASE_SERVICE_ROLE_KEY must be supplied server-side
+- Docker build must pass
 - /healthz must pass
 - local /readyz must pass
-- MCP initialize + tools/list must expose required backend tools
-- nginx -t must pass
-- TLS reverse proxy must pass
-- unauthenticated /call must return 401
+- all 12 Migadu SMTP AUTH checks must pass
+- nginx -t and local TLS reverse-proxy verification must pass

@@ -1,9 +1,9 @@
 // src/agents/codex/index.ts
 
-import { CodexClient } from '../../core/client';
-import { Logger } from '../../core/logger';
-import { CodexConfig, CodexRequest, CodexResponse } from './types';
-import { createCallTools, createCustomerTools, createTaskTools } from './tools';
+import { CodexClient } from '../../core/client.js';
+import { Logger } from '../../core/logger.js';
+import { CodexConfig, CodexRequest, CodexResponse } from './types.js';
+import { createCallTools, createCustomerTools, createTaskTools } from './tools.js';
 
 /**
  * وكيل Codex الرئيسي لمركز الاتصال
@@ -84,7 +84,7 @@ export class CodexAgent {
       return {
         status: 'ready',
         version: this.config.agentVersion,
-        tools: this.config.tools?.map(t => t.name) ?? [],
+        tools: this.config.tools?.map((t: any) => t.name) ?? [],
         timestamp: new Date()
       };
     } catch (error) {
@@ -100,5 +100,5 @@ export class CodexAgent {
 }
 
 // تصدير الأدوات والأنواع
-export * from './types';
-export * from './tools';
+export * from './types.js';
+export * from './tools.js';

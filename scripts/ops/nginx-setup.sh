@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# DEPRECATED: this installs the daftra.alazab.com:3400 Nginx site, a different
+# app than the current production target of this project (mcp.alazab.com:3300).
+# ./az.sh nginx no longer calls this file; use deploy/install-production.sh
+# (which installs deploy/mcp.alazab.com) instead. Kept only for reference.
 set -euo pipefail
 
 DOMAIN="daftra.alazab.com"

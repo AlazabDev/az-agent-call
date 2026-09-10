@@ -2,7 +2,7 @@
 
 `https://github.com/AlazabDev/az-agent-call`
 
-المطلوب هو **إصلاح المشروع فعليًا وتحويله إلى Az Agent Call Production حقيقي**، وليس مجرد إعادة تسمية ملفات Az Agent Mail أو إخفاء الأخطاء.
+المطلوب هو **إصلاح المشروع فعليًا وتحويله إلى Az Agent Call Production حقيقي**، وليس مجرد إعادة تسمية ملفات Az Agent Call Center أو إخفاء الأخطاء.
 
 ## قواعد إلزامية
 
@@ -37,7 +37,7 @@
 
 المشروع الحالي خليط بين:
 
-- `az-agent-mail`
+- `az-agent-call`
 - `az-agent-call`
 
 وحاليًا توجد أسماء ومسارات متعارضة في:
@@ -154,7 +154,7 @@ interface TelephonyProvider {
 
 أضف Supabase migrations جديدة مخصصة لـAz Agent Call.
 
-لا تستخدم `mail_send_log` كسجل مكالمات.
+لا تستخدم `call_logs` كسجل مكالمات.
 
 أنشئ على الأقل تصميمًا مناسبًا للجداول التالية:
 
@@ -394,7 +394,7 @@ copilot:
 
 - `server/mailer.ts` يبقى Mail service فقط.
 - Telephony لا يستدعي Mailer.
-- Call logs لا تستخدم `mail_send_log`.
+- Call logs لا تستخدم `call_logs`.
 - Call readiness لا تستخدم SMTP readiness.
 - Dashboard لا تعتبر mail sends مكالمات.
 
@@ -494,7 +494,7 @@ az-agent-call
 بحيث لا يوجد أي reference إلى:
 
 ```text
-az-agent-mail
+az-agent-call
 ```
 
 إذا لم يكن مقصودًا كخدمة مستقلة.
@@ -631,7 +631,7 @@ UI
 ممنوع استخدام:
 
 ```text
-mail_send_log
+call_logs
 ```
 
 لعرض:
@@ -984,8 +984,8 @@ az_tok_
 نفذ scan على:
 
 ```text
-az-agent-mail
-agent-mail
+az-agent-call
+agent-call
 /mail
 mail_
 SMTP

@@ -5,13 +5,13 @@
 - Service: `az-agent-call`
 - Host path: `/var/www/apps/az-agent-call`
 - Persistent data: `/var/lib/az-agent-call/data`
-- Public host: `https://mcp.alazab.com`
-- Primary MCP endpoint: `https://mcp.alazab.com/call`
-- Conventional alias: `https://mcp.alazab.com/mcp`
-- Legacy compatibility alias only: `https://mcp.alazab.com/mail`
-- Admin: `https://mcp.alazab.com/admin/`
+- Public host: `https://agent-call.alazab.com`
+- Primary MCP endpoint: `https://agent-call.alazab.com/call`
+- Conventional alias: `https://agent-call.alazab.com/mcp`
+- Legacy compatibility alias only: `https://agent-call.alazab.com/mail`
+- Admin: `https://agent-call.alazab.com/admin/`
 
-The project is the Alazab **Agent Call Center**. Existing Supabase `mail_*` table names and the `agent-mail-status` Edge Function are retained as database compatibility identifiers and are not the service identity.
+The project is the Alazab **Agent Call Center**. Existing Supabase `mail_*` table names and the `agent-call-status` Edge Function are retained as database compatibility identifiers and are not the service identity.
 
 ## Production start
 
@@ -43,15 +43,15 @@ PY
 
 Use it in Microsoft Foundry as a Custom Keys project connection:
 
-- Target: `https://mcp.alazab.com/call`
+- Target: `https://agent-call.alazab.com/call`
 - Header name: `Authorization`
 - Header value: `Bearer <backend-token>`
 
-For the first successful Foundry connection, connect directly to `mcp.alazab.com/call`. Put APIM in front only after direct `initialize`/`tools/list` succeeds; this isolates APIM/upstream 502 problems from MCP application problems.
+For the first successful Foundry connection, connect directly to `agent-call.alazab.com/call`. Put APIM in front only after direct `initialize`/`tools/list` succeeds; this isolates APIM/upstream 502 problems from MCP application problems.
 
 ## Connect to Microsoft Foundry from a shell with `azd ai`
 
-The project includes `deploy/connect-foundry.sh`. It reads the generated backend-agent bearer token from the persistent token store and creates a direct remote-tool connection to `https://mcp.alazab.com/call`, then creates the `az-agent-call` toolbox. Its default Foundry project endpoint is `https://az-ai-resource.services.ai.azure.com/api/projects/az-ai-gateway`.
+The project includes `deploy/connect-foundry.sh`. It reads the generated backend-agent bearer token from the persistent token store and creates a direct remote-tool connection to `https://agent-call.alazab.com/call`, then creates the `az-agent-call` toolbox. Its default Foundry project endpoint is `https://az-ai-resource.services.ai.azure.com/api/projects/az-ai-gateway`.
 
 ```bash
 ./deploy/connect-foundry.sh

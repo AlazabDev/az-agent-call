@@ -8,7 +8,7 @@
 
 ### Admin API
 
-`/api/*` is intentionally outside the Basic Auth path. It requires `Authorization: Bearer <Supabase access token>` and resolves roles server-side using `adp_user_roles` plus optional `mail_admins` delegation.
+`/api/*` is intentionally outside the Basic Auth path. It requires `Authorization: Bearer <Supabase access token>` and resolves roles server-side using `adp_user_roles` plus optional `call_admins` delegation.
 
 ### Central MCP Gateway
 
@@ -34,6 +34,6 @@ The MCP gateway assembles tools dynamically from modular connectors under `serve
 
 ## Runtime Telemetry
 
-- `mail_gateway_instances` receives a 30-second heartbeat from each active gateway instance.
-- `mail_agent_connections` logs authenticated MCP traffic and tracks `last_whoami_at` execution.
-- `mail_send_log` records every call dispatch, SMS, and template audit entry.
+- `call_gateway_instances` receives a 30-second heartbeat from each active gateway instance.
+- `call_agent_connections` logs authenticated MCP traffic and tracks `last_whoami_at` execution.
+- `call_logs` records every call dispatch, SMS, and template audit entry.

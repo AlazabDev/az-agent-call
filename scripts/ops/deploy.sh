@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# DEPRECATED: this script targets daftra.alazab.com:3400, a different app/port
+# than the current production target of this project (mcp.alazab.com:3300).
+# ./az.sh deploy no longer calls this file; use deploy/install-production.sh
+# (or ./az.sh deploy) instead. Kept only for reference/legacy use.
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/var/www/apps/az-agent-call}"

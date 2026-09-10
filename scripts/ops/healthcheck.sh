@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# DEPRECATED: defaults to port 3400 (a different app). Current production
+# port for this project is 3300 (see docker-compose.yml / deploy/*.sh).
+# ./az.sh healthcheck no longer calls this file; use
+# deploy/verify-production.sh (or ./az.sh healthcheck) instead.
 set -euo pipefail
 
 PORT="${PORT:-3400}"

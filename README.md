@@ -1,7 +1,4 @@
-# Az Agent Call Center v3.1.0
-
-> **Project identity:** this repository is the Alazab **Agent Call Center**. Email, Daftra, WhatsApp, MagicPlan and UberFix are integrations used by call-center agents; they do not redefine the project as a mail application. Existing Supabase `mail_*` table names are retained for backward-compatible data storage.
-
+# Az Agent Call Center v3.0.1
 
 Production control plane and MCP mail gateway for Alazab AI agents.
 
@@ -10,7 +7,7 @@ Production control plane and MCP mail gateway for Alazab AI agents.
 - **Admin UI:** React + Vite + TypeScript, restored on the full UI architecture supplied in `src-temp.zip` (49 shadcn/Radix components, sidebar layout, dialogs, tabs, tables, toasts, responsive hooks).
 - **Human authentication:** `/admin/` is protected by HTTP Basic at the Node gateway, then Supabase Password Auth and Alazab central RBAC (`adp_user_roles`).
 - **Agent authentication:** fixed bearer token per Foundry agent. Clear tokens are persisted in `/app/data/agent-tokens.json`; Supabase stores SHA-256 hashes/hints only.
-- **MCP:** `https://mcp.alazab.com/call` — MCP Streamable HTTP for Azure Foundry (GET/POST handled by the MCP transport).
+- **MCP:** `POST https://agent-call.alazab.com/mail`.
 - **SMTP:** Migadu STARTTLS on `smtp.migadu.com:587`.
 - **Data:** Supabase production project `alazab-db` (`bxuhcbfdoaflsgbxiqei`).
 - **Templates:** 144 shared templates. Original agent ownership is now recommendation metadata only; every authenticated agent can list, render and send every template.
@@ -18,7 +15,7 @@ Production control plane and MCP mail gateway for Alazab AI agents.
 ## MCP tools
 
 ### `whoami`
-Returns the fixed agent identity, Foundry ID, mailbox, SMTP readiness, MCP endpoint, global template access and a connection-health timestamp. It also updates `mail_agent_connections.last_whoami_at`.
+Returns the fixed agent identity, Foundry ID, mailbox, SMTP readiness, MCP endpoint, global template access and a connection-health timestamp. It also updates `call_agent_connections.last_whoami_at`.
 
 ### `list_templates`
 Returns the full 144-template catalog to every agent. Each item includes `recommendedAgent`; `recommended=true` marks templates originally designed for the calling agent.
@@ -30,7 +27,7 @@ Returns required/optional metadata for any template.
 Renders any template without sending.
 
 ### `send_template_email`
-Sends any template from the global catalog. `From` and `Reply-To` are always forced to the bearer-token agent mailbox.
+Sends any template from the global catalog. `From` and `Reply-To` are always forced to the bearer-token Agent Call Centerbox.
 
 ### `send_email`
 Free-form `subject + text/html` send to one or more recipients. No `from` parameter exists.
@@ -39,24 +36,24 @@ Free-form `subject + text/html` send to one or more recipients. No `from` parame
 
 Applied migrations:
 
-1. `20260829042651_az_agent_mail_control_plane`
-2. `20260829042848_harden_az_agent_mail_rls`
-3. `20260829065236_extend_agent_mail_runtime_status`
+1. `20260829042651_az_agent_call_control_plane`
+2. `20260829042848_harden_az_agent_call_rls`
+3. `20260829065236_extend_agent_call_runtime_status`
 
 Production Edge Function:
 
-- `agent-mail-status` — ACTIVE, JWT verification enabled. Version 3 verifies the caller JWT, then performs control-plane reads with the Edge Function server-side service role so status checks do not depend on end-user RLS visibility.
+- `agent-call-status` — ACTIVE, JWT verification enabled. Version 3 verifies the caller JWT, then performs control-plane reads with the Edge Function server-side service role so status checks do not depend on end-user RLS visibility.
 
 Runtime tables include:
 
-- `mail_agents`
-- `mail_templates`
-- `mail_send_log`
-- `mail_settings`
-- `mail_admins`
-- `mail_gateway_instances`
-- `mail_agent_connections`
-- `mail_agent_stats`
+- `call_agents`
+- `call_templates`
+- `call_logs`
+- `call_settings`
+- `call_admins`
+- `call_gateway_instances`
+- `call_agent_connections`
+- `call_agent_stats`
 
 ## Authentication model
 
@@ -81,7 +78,7 @@ Foundry Agent
   -> MCP tools
 ```
 
-The clear token file is on a persistent Docker volume. It is created with 0600 permissions and missing agent tokens are generated on first start. Token hashes are synchronized to `mail_agents`. Normal Gateway restarts no longer modify `token_rotated_at`; that audit timestamp changes only for newly generated or explicitly rotated credentials.
+The clear token file is on a persistent volume. It is created with 0600 permissions and missing agent tokens are generated on first start. Token hashes are synchronized to `call_agents`. Normal Gateway restarts no longer modify `token_rotated_at`; that audit timestamp changes only for newly generated or explicitly rotated credentials.
 
 ## SMTP password resolution
 
@@ -112,7 +109,7 @@ The production ZIP is **root-flat**: `package.json`, `.env.production`, `Dockerf
 
 ```bash
 install -d -m 0750 /var/www/apps/az-agent-call
-unzip az-agent-call-v3.1.0-production.zip -d /var/www/apps/az-agent-call
+unzip az-agent-call-v3.0.1-production.zip -d /var/www/apps/az-agent-call
 cd /var/www/apps/az-agent-call
 ```
 
@@ -140,7 +137,7 @@ Do not expose this key to Vite or any `VITE_*` variable.
 
 ### 3. Install
 
-The TLS certificate for `mcp.alazab.com` must already exist under `/etc/letsencrypt/live/mcp.alazab.com/`.
+The TLS certificate for `agent-call.alazab.com` must already exist under `/etc/letsencrypt/live/agent-call.alazab.com/`.
 
 ```bash
 chmod +x deploy/*.sh
@@ -151,9 +148,9 @@ The script:
 
 - validates Docker/Nginx/environment/TLS prerequisites and rejects placeholder secrets;
 - requires all 12 per-agent Migadu credentials and the server-side Supabase service role key;
-- creates the persistent token volume directory;
-- builds the multi-stage Node image;
-- starts the container on `127.0.0.1:3300` only;
+- creates the persistent token directory;
+- builds the Node project;
+- starts the gateway service;
 - verifies `/healthz` and blocks until local `/readyz` succeeds;
 - performs a **one-shot real SMTP AUTH verification for all 12 Migadu mailboxes** before exposing the service;
 - backs up the existing Nginx site, validates the replacement, and rolls it back if `nginx -t` fails;
@@ -168,9 +165,9 @@ The script:
 Expected endpoints:
 
 ```text
-Public: https://mcp.alazab.com/admin/
-Public: https://mcp.alazab.com/call
-Public: https://mcp.alazab.com/healthz
+Public: https://agent-call.alazab.com/admin/
+Public: https://agent-call.alazab.com/mail
+Public: https://agent-call.alazab.com/healthz
 Local only: http://127.0.0.1:3300/readyz
 ```
 

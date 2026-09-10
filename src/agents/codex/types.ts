@@ -1,7 +1,5 @@
 // src/agents/codex/types.ts
 
-import { OpenAIClient } from '@azure/openai';
-
 /**
  * أنواع الاستجابات من وكيل Codex
  */
@@ -82,21 +80,3 @@ export interface CodexConfig {
   enableLogging?: boolean;
   tools?: CodexTool[];
 }
-
-/**
- * أنواع عميل Azure AI
- */
-export interface AIProjectClientConfig {
-  endpoint: string;
-  credential: DefaultAzureCredential;
-  options?: {
-    retryPolicy?: {
-      maxRetries: number;
-      delayMs: number;
-    };
-    timeout?: number;
-  };
-}
-
-// استيراد الأنواع المطلوبة
-import { DefaultAzureCredential } from '@azure/identity';

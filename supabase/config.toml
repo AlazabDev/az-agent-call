@@ -16,5 +16,5 @@ enabled = true
 site_url = "https://mcp.alazab.com/admin/"
 additional_redirect_urls = ["http://localhost:8080/admin/", "https://mcp.alazab.com/admin/"]
 
-[functions.agent-mail-status]
+[functions.agent-call-status]
 verify_jwt = true

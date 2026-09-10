@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Alazab Agent Call Center (az-agent-call) — Central Control CLI
-# Domain: daftra.alazab.com | Port: 3400 | Manager: pnpm
+# Alazab Agent Call Center Gateway (az-agent-call source / az-agent-call deployment)
+# Domain: mcp.alazab.com | Port: 3300 | Manager: pnpm
+#
+# NOTE: scripts/ops/deploy.sh, scripts/ops/nginx-setup.sh and
+# scripts/ops/healthcheck.sh are leftover from an earlier iteration of this
+# project that targeted a different domain/port (daftra.alazab.com:3400).
+# They are kept in the repository untouched, but this controller intentionally
+# does NOT call them anymore so that `./az.sh deploy|nginx|healthcheck` always
+# operates on the current, documented production target (mcp.alazab.com:3300),
+# matching README.md, AUDIT.md and deploy/install-production.sh.
 # ==============================================================================
 set -euo pipefail
 
@@ -18,44 +26,38 @@ case "$COMMAND" in
         bash scripts/ops/build.sh "${@:2}"
         ;;
     deploy)
-        bash scripts/ops/deploy.sh "${@:2}"
+        # First-time production install (builds image, waits for health/readiness,
+        # verifies SMTP for all agents, installs Nginx + TLS). Must run as root
+        # on the target server with .env.production already filled in.
+        bash deploy/install-production.sh "${@:2}"
+        ;;
+    update)
+        # Redeploy an existing installation after a code/config change.
+        bash deploy/update-production.sh "${@:2}"
         ;;
     fix)
         bash scripts/ops/fix.sh "${@:2}"
         ;;
-    healthcheck|health|status)
-        bash scripts/ops/healthcheck.sh "${@:2}"
-        ;;
-    nginx|ssl)
-        bash scripts/ops/nginx-setup.sh "${@:2}"
+    healthcheck|health|status|verify)
+        bash deploy/verify-production.sh "${@:2}"
         ;;
     logs)
         docker compose logs -f --tail=100 || true
         ;;
-    verify|check|validate)
-        bash scripts/ops/verify-environment.sh "${@:2}"
-       ;;
-    agent|codex)
-        echo "🤖 Codex Agent Commands:"
-        echo "  ./az.sh agent status   - Check agent status"
-        echo "  ./az.sh agent test     - Test agent connection"
-        echo "  ./az.sh agent chat     - Open chat interface"
-        ;;
     help|*)
         echo "================================================================="
-        echo "  Az Agent Call — Alazab Agent Contact Center (az.sh Controller) "
+        echo "  Az Agent Call Center Gateway (az.sh Controller) — mcp.alazab.com:3300 "
         echo "================================================================="
         echo "Usage: ./az.sh [command]"
         echo ""
         echo "Commands:"
         echo "  install      Install all project dependencies using pnpm"
-        echo "  build        Validate 144 voice templates & compile production bundle"
-        echo "  deploy       Deploy container and services to production (daftra.alazab.com)"
-        echo "  fix          Run diagnostic checks, fix types, and re-verify project"
-        echo "  healthcheck  Check system readiness, /healthz, and /readyz endpoints"
-        echo "  nginx        Install Nginx site config for daftra.alazab.com on port 3400"
+        echo "  build        Validate 144 templates & compile production bundle"
+        echo "  deploy       First-time production install (deploy/install-production.sh)"
+        echo "  update       Redeploy an existing installation (deploy/update-production.sh)"
+        echo "  fix          Run diagnostic checks, typecheck, and re-verify project"
+        echo "  healthcheck  Verify health/readiness/nginx/TLS (deploy/verify-production.sh)"
         echo "  logs         Tail live container logs"
-        echo "  agent        Codex Agent management commands"
         echo "  help         Display this help message"
         echo "================================================================="
         ;;

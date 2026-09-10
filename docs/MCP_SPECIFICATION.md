@@ -13,7 +13,7 @@ The **Alazab Central MCP Protocol** defines the unified, standard interface for 
 - **Unified Agent Surface**: AI agents consume a single, consistent protocol specification regardless of underlying service boundaries.
 - **Server-Locked Security**: Authentication and identity assertions are immutably resolved on the server via bearer tokens. Tools cannot forge or alter the authenticated entity.
 - **Modular Connector Architecture**: New business applications (e.g. Daftra Accounting, payment gateways, custom CRMs) are registered as plug-and-play MCP connectors without modifying core protocol code.
-- **Auditability & Observability**: Every tool execution is captured with structural metadata in central Supabase audit logs (`mail_send_log` / `call_audit_log` / `mcp_activity_log`).
+- **Auditability & Observability**: Every tool execution is captured with structural metadata in central Supabase audit logs (`call_logs` / `call_audit_log` / `mcp_activity_log`).
 
 ---
 

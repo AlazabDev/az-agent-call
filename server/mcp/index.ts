@@ -1,36 +1,38 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { RuntimeAgent } from "../agents.js";
 import { config } from "../config.js";
-import { registerDaftraConnector } from "./connectors/daftra/index.js";
-import { registerMagicPlanConnector } from "./connectors/magicplan.js";
 import { registerTelephonyConnector } from "./connectors/telephony.js";
 import { registerTemplatesConnector } from "./connectors/templates.js";
-import { registerUberFixConnector } from "./connectors/uberfix.js";
+import { registerDaftraConnector } from "./connectors/daftra/index.js";
 import { registerWhatsAppConnector } from "./connectors/whatsapp.js";
+import { registerMagicPlanConnector } from "./connectors/magicplan.js";
+import { registerUberFixConnector } from "./connectors/uberfix.js";
+import { registerCodexConnector } from "./connectors/codex.js";
 
 /** Builds an MCP server scoped to the bearer-token owner with modular domain connectors. */
 export function buildServerForAgent(agent: RuntimeAgent): McpServer {
-	const server = new McpServer(
-		{ name: "az-agent-call", version: config.version },
-		{
-			capabilities: { tools: {} },
-			instructions: [
-				`Alazab Central MCP Protocol (v${config.version})`,
-				`Authenticated Agent Identity: ${agent.mailbox} (${agent.foundry_id}).`,
-				"Domains connected: Telephony, Voice Templates, Daftra Accounting, WhatsApp Messaging, MagicPlan Architectural, UberFix Maintenance.",
-				"Server-locked identity: tools operate under fixed bearer token identity.",
-				"Every tool execution is logged in Supabase audit logs.",
-			].join("\n"),
-		},
-	);
+  const server = new McpServer(
+    { name: "az-agent-call", version: config.version },
+    {
+      capabilities: { tools: {} },
+      instructions: [
+        `Alazab Central MCP Protocol (v${config.version})`,
+        `Authenticated Agent Identity: ${agent.mailbox} (${agent.foundry_id}).`,
+        "Domains connected: Telephony, Voice Templates, Daftra Accounting, WhatsApp Messaging, MagicPlan Architectural, UberFix Maintenance, Codex AI Reasoning.",
+        "Server-locked identity: tools operate under fixed bearer token identity.",
+        "Every tool execution is logged in Supabase audit logs.",
+      ].join("\n"),
+    },
+  );
 
-	// Register Modular Domain Connectors
-	registerTelephonyConnector(server, agent);
-	registerTemplatesConnector(server, agent);
-	registerDaftraConnector(server, agent);
-	registerWhatsAppConnector(server, agent);
-	registerMagicPlanConnector(server, agent);
-	registerUberFixConnector(server, agent);
+  // Register Modular Domain Connectors
+  registerTelephonyConnector(server, agent);
+  registerTemplatesConnector(server, agent);
+  registerDaftraConnector(server, agent);
+  registerWhatsAppConnector(server, agent);
+  registerMagicPlanConnector(server, agent);
+  registerUberFixConnector(server, agent);
+  registerCodexConnector(server, agent);
 
-	return server;
+  return server;
 }

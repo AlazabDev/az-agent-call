@@ -24,7 +24,6 @@ curl -fsS http://127.0.0.1:3300/readyz | python3 -m json.tool || {
   docker compose --env-file "$ENV_FILE" logs --tail=200 az-agent-call >&2 || true
   exit 1
 }
-docker compose --env-file "$ENV_FILE" exec -T az-agent-call node dist-server/scripts/verify-mcp.js
-docker compose --env-file "$ENV_FILE" exec -T az-agent-call node dist-server/scripts/verify-smtp.js || echo "WARNING: SMTP integration is not fully ready; core MCP remains running." >&2
+docker compose --env-file "$ENV_FILE" exec -T az-agent-call node dist-server/scripts/verify-smtp.js
 nginx -t
 systemctl reload nginx

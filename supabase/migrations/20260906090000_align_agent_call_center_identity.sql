@@ -1,12 +1,12 @@
 -- Align production-facing identity with Az Agent Call Center while preserving
--- legacy mail_* tables and the agent-mail SSO slug for compatibility.
+-- legacy mail_* tables and the agent-call SSO slug for compatibility.
 begin;
 
-insert into public.mail_settings (key, value)
+insert into public.call_settings (key, value)
 values (
   'integration',
   jsonb_build_object(
-    'app_slug', 'agent-mail',
+    'app_slug', 'agent-call',
     'service_identity', 'az-agent-call',
     'display_name', 'Az Agent Call Center',
     'public_app_url', 'https://mcp.alazab.com',
@@ -27,6 +27,6 @@ set name_ar = 'مركز اتصال وكلاء العزب',
     base_url = 'https://mcp.alazab.com/admin/',
     redirect_url = 'https://mcp.alazab.com/admin/',
     updated_at = now()
-where slug = 'agent-mail';
+where slug = 'agent-call';
 
 commit;

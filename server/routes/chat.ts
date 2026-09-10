@@ -131,7 +131,7 @@ export function createChatRoutes(agent?: CodexAgent): Router {
       }
 
       logger.info(`🔧 [Chat] Executing tool: ${name}`);
-      const result = await agent.useTool(name, params);
+      const result = await agent.useTool(name as string, params);
 
       return res.json({
         success: true,

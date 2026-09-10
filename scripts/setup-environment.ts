@@ -1,8 +1,8 @@
 // src/scripts/setup-environment.ts
 
 import 'dotenv/config';
-import { setupEnvironment } from '../core/environment-setup.js';
-import { Logger } from '../core/logger.js';
+import { setupEnvironment } from '../src/core/environment-setup.js';
+import { Logger } from '../src/core/logger.js';
 
 const logger = new Logger('SetupScript');
 
@@ -41,7 +41,7 @@ async function main() {
         
         if (result.status.errors.length > 0) {
             console.log('\n⚠️  Errors:');
-            result.status.errors.forEach((err, i) => {
+            result.status.errors.forEach((err: string, i: number) => {
                 console.log(`   ${i + 1}. ${err}`);
             });
         }
