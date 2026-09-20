@@ -2,6 +2,7 @@ node_modules
 dist
 dist-server
 .env.*
+env/
 !.env.example
 *.log
 data/
@@ -11,3 +12,4 @@ account_cache.json
 *.sqlite3
 *.db
 .DS_Store
+openapi/env/

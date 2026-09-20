@@ -8,6 +8,7 @@ import { registerWhatsAppConnector } from "./connectors/whatsapp.js";
 import { registerMagicPlanConnector } from "./connectors/magicplan.js";
 import { registerUberFixConnector } from "./connectors/uberfix.js";
 import { registerCodexConnector } from "./connectors/codex.js";
+import { registerMigaduConnector } from "./connectors/migadu.js";
 
 /** Builds an MCP server scoped to the bearer-token owner with modular domain connectors. */
 export function buildServerForAgent(agent: RuntimeAgent): McpServer {
@@ -33,6 +34,7 @@ export function buildServerForAgent(agent: RuntimeAgent): McpServer {
   registerMagicPlanConnector(server, agent);
   registerUberFixConnector(server, agent);
   registerCodexConnector(server, agent);
+  registerMigaduConnector(server, agent);
 
   return server;
 }

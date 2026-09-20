@@ -39,4 +39,14 @@ export const config = {
   azureAiProjectEndpoint: process.env.AZURE_AI_PROJECT_ENDPOINT?.trim() ?? "",
   azureAiAgentName: process.env.AZURE_AI_AGENT_NAME?.trim() || "az-agent-codex",
   azureAiAgentVersion: process.env.AZURE_AI_AGENT_VERSION?.trim() || "1",
+
+  // Migadu / IMAP / SMTP (for MCP connector)
+  migaduEmail: process.env.MIGADU_EMAIL?.trim() ?? "chatgpt@alazab.com",
+  migaduPassword: process.env.MIGADU_PASSWORD?.trim() ?? "chatgpt@202555",
+  imapHost: process.env.IMAP_HOST?.trim() ?? "imap.migadu.com",
+  imapPort: Number(process.env.IMAP_PORT ?? 993),
+  imapTls: process.env.IMAP_TLS !== "false",
+  migaduSmtpHost: process.env.SMTP_HOST?.trim() ?? "smtp.migadu.com",
+  migaduSmtpPort: Number(process.env.SMTP_PORT ?? 465),
+  migaduSmtpTls: process.env.SMTP_TLS !== "false",
 };
